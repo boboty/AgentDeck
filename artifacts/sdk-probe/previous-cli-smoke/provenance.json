@@ -1,0 +1,7 @@
+{
+  "kind": "prior CLI-only runtime smoke probe; not SDK selection evidence",
+  "threadId": "01a15faf-ece3-71d3-af99-3223b616784f",
+  "sourcePath": "/tmp/agentdeck-runtime-probe.segWE9",
+  "sourceCleanup": "confirmed absent after archival; exact temporary directory removed",
+  "archivedAt": "2026-10-21T18:52:26.817Z"
+}

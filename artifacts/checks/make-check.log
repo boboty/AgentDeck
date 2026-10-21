@@ -1,0 +1,40 @@
+npm run check
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 check
+> npm run lint && npm run typecheck && npm run build && npm test
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 lint
+> eslint .
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 build
+> tsc -p tsconfig.build.json
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 test
+> node --test test/*.test.mjs
+
+✔ raw SDK events are appended as independent JSONL records (4.747833ms)
+✔ tool summaries include command events without rewriting their source record (0.143458ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57.708583

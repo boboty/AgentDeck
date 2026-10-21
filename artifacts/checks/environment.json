@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-22",
+  "node": "v24.13.0",
+  "npm": "11.6.2",
+  "codexCli": "0.163.0",
+  "codexSdk": "@openai/codex-sdk 0.163.0",
+  "codexLoginStatus": "Logged in using ChatGPT; token values were not read or printed",
+  "dockerCli": "Docker version 29.4.0, build 9d7ad9f",
+  "dockerDaemon": "Unavailable: no socket at unix:///Users/yanbo/.orbstack/run/docker.sock",
+  "npmCi": "exit 0; installed 101 packages from package-lock.json",
+  "webBuild": "Not applicable in Task 1; Web task has not started"
+}

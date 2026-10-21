@@ -1,0 +1,30 @@
+{
+  "name": "agentdeck",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "npm@11.6.2",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --test test/*.test.mjs",
+    "check": "npm run lint && npm run typecheck && npm run build && npm test",
+    "probe:sdk": "node dist/scripts/probe-codex-sdk.js",
+    "fingerprint": "node scripts/content-fingerprint.mjs"
+  },
+  "dependencies": {
+    "@openai/codex-sdk": "0.163.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.19.2",
+    "eslint": "10.13.0",
+    "globals": "17.13.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0"
+  }
+}

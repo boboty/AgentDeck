@@ -1,0 +1,20 @@
+npm run check
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 check
+> npm run lint && npm run typecheck && npm run build && npm test
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 lint
+> eslint .
+
+
+/Users/yanbo/Github/AgentDeck/scripts/content-fingerprint.mjs
+  25:45  error  'Buffer' is not defined   no-undef
+  35:1   error  'console' is not defined  no-undef
+
+✖ 2 problems (2 errors, 0 warnings)
+
+make: *** [check] Error 1

@@ -1,0 +1,55 @@
+{
+  "sdk": "@openai/codex-sdk",
+  "sdkVersion": "0.163.0",
+  "cliVersion": "0.163.0",
+  "results": [
+    {
+      "role": "worker",
+      "model": "gpt-6-luna",
+      "reasoningEffort": "high",
+      "threadId": "01a15fce-363b-7b73-8c7c-b7fc33c17c68",
+      "workingDirectory": ".agentdeck-data/sdk-probe/worker",
+      "finalText": "{\"role\":\"worker\",\"observed\":\"isolated-context:worker\"}",
+      "toolSummaries": [
+        {
+          "eventType": "item.started",
+          "itemType": "command_execution",
+          "name": "/bin/zsh -lc 'cat ./probe-input.txt'",
+          "status": "in_progress"
+        },
+        {
+          "eventType": "item.completed",
+          "itemType": "command_execution",
+          "name": "/bin/zsh -lc 'cat ./probe-input.txt'",
+          "status": "completed"
+        }
+      ],
+      "rawEventFile": "artifacts/sdk-probe/worker.jsonl",
+      "rawEventCount": 7
+    },
+    {
+      "role": "verifier",
+      "model": "gpt-6-luna",
+      "reasoningEffort": "high",
+      "threadId": "01a15fce-363a-7f83-96a6-72a062cd05f3",
+      "workingDirectory": ".agentdeck-data/sdk-probe/verifier",
+      "finalText": "{\"role\":\"verifier\",\"observed\":\"isolated-context:verifier\"}",
+      "toolSummaries": [
+        {
+          "eventType": "item.started",
+          "itemType": "command_execution",
+          "name": "/bin/zsh -lc 'cat ./probe-input.txt'",
+          "status": "in_progress"
+        },
+        {
+          "eventType": "item.completed",
+          "itemType": "command_execution",
+          "name": "/bin/zsh -lc 'cat ./probe-input.txt'",
+          "status": "completed"
+        }
+      ],
+      "rawEventFile": "artifacts/sdk-probe/verifier.jsonl",
+      "rawEventCount": 7
+    }
+  ]
+}
