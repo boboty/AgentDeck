@@ -2,9 +2,9 @@
 
 ## Purpose and current phase
 
-AgentDeck is a local-only customer-support collaboration demo built with React, Vite, and a lightweight Node.js API. Its frozen product requirements are AC1–AC6 in the Agent Board Task history. The SDK baseline and real collaboration backend are established; Task #3 adds the Web event viewer, browser ticket entry, Compose packaging, and visual replay interactions.
+AgentDeck is a local-only customer-support collaboration demo built with React, Vite, and a lightweight Node.js API. Its frozen product requirements are AC1–AC6 in the Agent Board Task history. The SDK baseline and real collaboration backend are established. Current phase is Task #3: deliver the complete MVP Web experience, portable persisted replay fixtures, and Docker Compose entrypoint.
 
-Current phase: backend Task #2 implementation is complete and awaiting its independent verifier. Do not expand this phase into React/Vite UI or user-facing dashboard; those belong to Task #3. Preserve the SDK baseline, local simulation, isolated boards, append-only events, and bounded correction behavior while resolving any verifier findings.
+Current phase: implement the Task #3 React 19 / TypeScript / Vite 8 Web experience, shipped replay records, and Compose runtime over the accepted Task #2 backend. Use the local BenYan Design System source snapshot from `design-system/styles.css`, tokens, components, and logo assets. Show live SSE records and corrections as returned by the real backend; replay is read-only. Do not add model-driven UI behavior, fake progress, external integrations, or features beyond the frozen product acceptance criteria.
 
 ## Engineering standard
 
@@ -33,7 +33,9 @@ The SDK probe sends a small prompt to the configured model. The local backend se
 - Keep all data simulated. No CRM, financial, telephony, voice, multi-tenant, user-management, or general-purpose agent-platform scope.
 - Agent sessions use the selected official Codex SDK and `runStreamed`; persist its original JSONL events. Never implement a custom agent loop. The Orchestrator proposes a bounded plan; deterministic application code validates it and performs all task lifecycle changes. Worker data tools are read-only. Verifier starts with independent programmatic checks, then makes semantic judgments only.
 - The application is local-only. Do not publish, deploy, push, or merge without explicit authorization.
+- Compose serves the production Web build and API from one local-only app endpoint, persists runtime state and isolated aboard databases, and health-checks the HTTP/API path. Containers do not contain the development `.git/agent-board.json`; only the explicit container mode allows that file to be absent, and each runtime board must still use its canonical workspace root and identity path. Fail closed on any runtime project/database mismatch.
+- Compose obtains Codex authentication only through an explicit read-only runtime bind mount of the host's official Codex `auth.json`; use a separate writable volume for CLI session data. Never copy credentials into image layers, project files, logs, or demo artifacts. Missing auth must fail clearly; never substitute mock agent results.
 
 ## Docker plan and present environment
 
-Follow the standard's Docker Compose direction in Task #3. Compose should start the complete app and any required services with health checks, persist required state, and provide the single local web entry point. Add PostgreSQL only if a later product requirement demonstrates a database need; the current simulated, local MVP has none. Docker/OrbStack is now reachable in this environment (server 29.4.0), but Compose build/start/restart checks remain for Task #3 and must not be claimed here.
+Compose starts the complete app, exposes one localhost web address, health-checks the HTTP/API path, persists runtime events and isolated aboard workspaces across restart, and bind-mounts the Codex auth file read-only from the host. Add no PostgreSQL: the simulated local product uses JSONL/filesystem persistence and independent aboard SQLite projects. Docker/OrbStack is reachable in this environment (server 29.4.0); validate a clean Compose project before delivery.

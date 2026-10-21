@@ -1,0 +1,34 @@
+{
+  "evidenceType": "byte-identical read-only bundled replay fixture provenance",
+  "records": [
+    {
+      "id": "success",
+      "sourcePath": "artifacts/backend-smoke/final-success-replay.json",
+      "fixturePath": "server/fixtures/replays/success.json",
+      "ticketId": "tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430",
+      "status": "completed",
+      "sha256": "523bc04160f6e415081271c5fdeb19f68b6e717a6ac5d9ef034c246e192fca5e",
+      "bytes": 43114
+    },
+    {
+      "id": "correction",
+      "sourcePath": "artifacts/backend-smoke/correction-final-replay.json",
+      "fixturePath": "server/fixtures/replays/correction.json",
+      "ticketId": "tkt_e9048d2b-7f0c-400e-be26-2fdefd1c339d",
+      "status": "human_review",
+      "sha256": "6a1873670d52b3773383f5fb4d69f52aa4150fb280f961a29c973feedf43c263",
+      "bytes": 131810
+    },
+    {
+      "id": "live",
+      "sourcePath": "artifacts/task3-web/live-web-run-tkt_b2755e67-af0f-4eb5-99d9-dd132716b94a.json",
+      "fixturePath": "server/fixtures/replays/live.json",
+      "ticketId": "tkt_b2755e67-af0f-4eb5-99d9-dd132716b94a",
+      "status": "completed",
+      "sourceSnapshotHash": "36ea969b1ed7ed1f41763b2c4252579d48779eeb40c57f931685bd920eeaaca7",
+      "resultHash": "512304d0279b4269b0ad318c1c8f1682ebdcadc646b55a0046254a31de2b794c",
+      "sha256": "82d4e9261fbb1960f804c59a6a1e1cd4f4d865d713d229884b3aa1f53b3b8e1b",
+      "bytes": 56231
+    }
+  ]
+}

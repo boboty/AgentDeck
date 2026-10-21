@@ -1,0 +1,25 @@
+export const RUNTIME_EVENT_TYPES = [
+  "ticket.created",
+  "ticket.queued",
+  "ticket.run_requested",
+  "ticket.completed",
+  "ticket.failed",
+  "orchestrator.plan",
+  "plan.validated",
+  "board.isolated",
+  "task.in_progress",
+  "agent.tool",
+  "agent.completed",
+  "agent.failed",
+  "worker.proposal",
+  "verifier.programmatic",
+  "verifier.semantic",
+  "verifier.semantic_skipped",
+  "correction.run_requested",
+  "correction.started",
+  "correction.worker_proposal",
+  "correction.completed",
+  "correction.failed",
+] as const;
+
+export type RuntimeEventType = (typeof RUNTIME_EVENT_TYPES)[number];

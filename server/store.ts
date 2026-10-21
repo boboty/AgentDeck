@@ -1,7 +1,7 @@
 import { appendFile, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { randomUUID } from "node:crypto";
-import type { RuntimeEvent, Ticket } from "./domain.js";
+import type { RuntimeEvent, RuntimeEventType, Ticket } from "./domain.js";
 
 export class RuntimeStore {
   readonly root: string;
@@ -58,7 +58,7 @@ export class RuntimeStore {
     return ticket;
   }
 
-  async appendEvent(ticket: Ticket, type: string, role: RuntimeEvent["role"], data: Record<string, unknown>): Promise<RuntimeEvent> {
+  async appendEvent(ticket: Ticket, type: RuntimeEventType, role: RuntimeEvent["role"], data: Record<string, unknown>): Promise<RuntimeEvent> {
     const path = resolve(this.root, ticket.eventsFile);
     await mkdir(dirname(path), { recursive: true });
     const previous = await this.readEvents(ticket);

@@ -1,0 +1,26 @@
+{
+  "observedAt": "2026-10-21T19:40:00Z",
+  "method": "official Codex CLI codex doctor --json in host and Compose container; output summarized without credentials or configuration contents",
+  "host": {
+    "providerReachability": "ok",
+    "websocketReachability": "ok"
+  },
+  "composeContainer": {
+    "providerReachability": "fail",
+    "websocketReachability": "warning",
+    "authCredentials": "ok",
+    "configLoad": "ok",
+    "appServer": "ok",
+    "generalNetworkEnvironment": "ok",
+    "gitEnvironment": "ok",
+    "installation": "ok",
+    "failedCheckSummary": "one or more required provider endpoints are unreachable over HTTP",
+    "provider": "ChatGPT auth (chatgpt.com)"
+  },
+  "authMount": {
+    "readOnly": true,
+    "hostAndContainerContentsIdentical": true,
+    "credentialContentsRecorded": false
+  },
+  "conclusion": "The current container live-model workflow is blocked by provider reachability, not an observed missing login, application configuration, app-server, or general-network check. No TLS/network security controls were changed and no authentication data was copied into the project or image."
+}

@@ -1,0 +1,47 @@
+{
+  "previousVerificationFact": "01M5G08F86711MQMKJ10SGQD4C",
+  "previousDeliveryFact": "01M5G01NSS89XYWPXSX3YCMQWH",
+  "previousFingerprint": "597e57f8737b20f2bc9eb930b940d16466762bc145920be1f9c13efb979c464c",
+  "repairScope": [
+    "Single runtime event type source now drives both backend event typing and the React EventSource subscription list.",
+    "Timeline rows expose their actual event type for accessible, precise regression assertions.",
+    "Programmatic verifier event details now read the emitted checks array and summarize its actual passing count."
+  ],
+  "verification": {
+    "command": "make check",
+    "result": "PASS",
+    "details": "npm check (lint, backend/frontend typecheck, production build, 7 unit tests); HTTP/SSE smoke; live SSE UI regression; Playwright UI suite (3 passed, explicit paid-model run skipped)."
+  },
+  "updatedComposeImage": {
+    "build": "PASS",
+    "imageId": "sha256:82905984e752eada2a71b0b4cde0e77c77a6c16b03b9e431bad44e76acedd8a5",
+    "smokeEvidence": "artifacts/task3-web/compose-smoke-repair-r1.json",
+    "checks": "healthy service, home, health API, all three read-only replay fixtures, read-only auth mount",
+    "modelCall": "not run; previous provider-reachability failure remains documented in the original evidence",
+    "cleanup": "test-only Compose project, network and its newly-created empty volumes removed; image remains cached"
+  },
+  "liveSseUiRegression": {
+    "evidence": "artifacts/task3-web/live-sse-ui-smoke.json",
+    "transport": "Real EventSource browser connection to the isolated app HTTP /events/stream endpoint (200 text/event-stream). Test starts with ticket.created only, then appends the saved real-run events after the stream is open; no production status or Agent Board state is mutated.",
+    "fixtureSource": "artifacts/task3-web/live-web-run-tkt_b2755e67-af0f-4eb5-99d9-dd132716b94a.json",
+    "fixtureSha256": "82d4e9261fbb1960f804c59a6a1e1cd4f4d865d713d229884b3aa1f53b3b8e1b",
+    "displayed": {
+      "plan.validated": 1,
+      "agent.completed": 3,
+      "agent.tool": 4,
+      "worker.proposal": 1,
+      "verifier.programmatic": "1 row; 7 checks shown as PASS",
+      "verifier.semantic": 1
+    }
+  },
+  "evidenceReuse": {
+    "realModelRun": "Unchanged backend, role prompts, data, and persisted real three-role run; no paid model call repeated.",
+    "compose": "Unchanged server protocol and deployment files; existing Compose build/health/auth-mount/restart evidence remains scoped to its original verification.",
+    "historicalR1": "Retained unchanged; this repair delivery and subsequent verification supersede neither its RC fact nor its recorded fingerprint."
+  },
+  "cleanup": {
+    "testServer": "stopped by regression script",
+    "isolatedRuntimeData": "removed by regression script",
+    "modelCalls": 0
+  }
+}

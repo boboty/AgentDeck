@@ -1,0 +1,15 @@
+.git
+.git/**
+node_modules
+node_modules/**
+dist
+web/dist
+.agentdeck-data
+.env
+.env.*
+!.env.example
+artifacts/**
+playwright-report
+test-results
+*.log
+.DS_Store

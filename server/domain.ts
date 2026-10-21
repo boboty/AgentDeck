@@ -1,3 +1,6 @@
+import type { RuntimeEventType } from "../src/runtime/event-types.js";
+export type { RuntimeEventType } from "../src/runtime/event-types.js";
+
 export const SCENARIOS = {
   ordinary: {
     title: "普通咨询：订单配送进度",
@@ -59,7 +62,7 @@ export interface RuntimeEvent {
   id: number;
   ticket_id: string;
   at: string;
-  type: string;
+  type: RuntimeEventType;
   role?: "orchestrator" | "worker" | "verifier" | "system";
   data: Record<string, unknown>;
 }

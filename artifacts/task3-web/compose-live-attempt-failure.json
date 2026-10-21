@@ -1,0 +1,95 @@
+{
+  "evidenceType": "actual current-Web Compose SDK attempt",
+  "interpretation": "The SDK run genuinely started but Codex stopped during workspace routing discovery; the service recorded a workflow failure. Not a successful three-role completion and not AC success evidence.",
+  "ticket": {
+    "id": "tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a",
+    "text": "请帮林女士确认订单 OD-24081 的配送状态，以及当前退货申请期限。",
+    "scenario": "ordinary",
+    "createdAt": "2026-10-21T19:39:04.288Z",
+    "status": "failed",
+    "eventsFile": "tickets/tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a/events.jsonl",
+    "error": "WORKFLOW_FAILED"
+  },
+  "events": [
+    {
+      "id": 1,
+      "ticket_id": "tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a",
+      "at": "2026-10-21T19:39:04.294Z",
+      "type": "ticket.created",
+      "role": "system",
+      "data": {
+        "scenario": "ordinary",
+        "text": "请帮林女士确认订单 OD-24081 的配送状态，以及当前退货申请期限。"
+      }
+    },
+    {
+      "id": 2,
+      "ticket_id": "tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a",
+      "at": "2026-10-21T19:39:04.579Z",
+      "type": "ticket.run_requested",
+      "role": "system",
+      "data": {
+        "requestId": "req_b411a625-0739-4d46-97be-f5bb8b56b0e1",
+        "testInjection": null
+      }
+    },
+    {
+      "id": 3,
+      "ticket_id": "tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a",
+      "at": "2026-10-21T19:39:04.582Z",
+      "type": "ticket.queued",
+      "role": "system",
+      "data": {
+        "queue": "local-demo"
+      }
+    },
+    {
+      "id": 4,
+      "ticket_id": "tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a",
+      "at": "2026-10-21T19:39:20.613Z",
+      "type": "agent.failed",
+      "role": "orchestrator",
+      "data": {
+        "provider": "openai-codex",
+        "operation": "runStreamed",
+        "durationMs": 16030,
+        "result": "error",
+        "retryCount": 0,
+        "errorType": "Error"
+      }
+    },
+    {
+      "id": 5,
+      "ticket_id": "tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a",
+      "at": "2026-10-21T19:39:20.615Z",
+      "type": "ticket.failed",
+      "role": "system",
+      "data": {
+        "code": "WORKFLOW_FAILED",
+        "message": "The local workflow stopped; inspect the run's restricted raw SDK diagnostics.",
+        "sourceSnapshotHash": null,
+        "resultHash": null,
+        "errorType": "Error"
+      }
+    }
+  ],
+  "orchestratorRawEvents": [
+    {
+      "type": "thread.started",
+      "thread_id": "01a15ff9-70fa-74e2-b1db-cd366d530b25"
+    },
+    {
+      "type": "turn.started"
+    },
+    {
+      "type": "error",
+      "message": "Reconnecting... 2/5 (workspace routing discovery failed)"
+    }
+  ],
+  "error": [
+    {
+      "type": "error",
+      "message": "Reconnecting... 2/5 (workspace routing discovery failed)"
+    }
+  ]
+}

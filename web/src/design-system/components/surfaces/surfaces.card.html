@@ -1,0 +1,46 @@
+<!-- @dsCard group="Components" viewport="700x460" name="Surfaces — Cards, Case Cards, Callouts" subtitle="Containers & enterprise case unit" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 26px; background: var(--surface-page); }
+  .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { Card, CaseCard, Callout } = window.BenYanAIDesignSystem_5a2b7b;
+    function Demo() {
+      return (
+        <div className="wrap">
+          <CaseCard
+            industry="金融 · 风控"
+            status="12 周 · 已交付"
+            title="智能信贷审核助手"
+            summary="将大模型嵌入审批工作流，沉淀可复用的评估清单与交付模板。"
+            metrics={[{ value: '+38%', label: '审核效率' }, { value: '4.2×', label: 'ROI' }]}
+            tags={['研发提效', '工作流', '风控']}
+          />
+          <div className="stack">
+            <Card accent elevation="md">
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-lg)', margin: '0 0 6px' }}>研发体系建设</h3>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>从试点验证到规模化应用的结构化路径。</p>
+            </Card>
+            <Callout title="方法论提示">先识别高价值、低风险的场景，再进入规模化落地。</Callout>
+            <Callout tone="warning" icon="!">数据合规需在试点启动前确认。</Callout>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

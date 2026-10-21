@@ -3,7 +3,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist/**", "node_modules/**", "artifacts/**", ".agentdeck-data/**"] },
+  { ignores: ["dist/**", "web/dist/**", "web/src/design-system/**", "node_modules/**", "artifacts/**", ".agentdeck-data/**"] },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -13,5 +13,9 @@ export default tseslint.config(
       "no-console": "off",
       "no-process-exit": "off",
     },
+  },
+  {
+    files: ["web/src/**/*.{ts,tsx}"],
+    languageOptions: { globals: globals.browser },
   },
 );

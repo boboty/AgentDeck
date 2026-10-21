@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "project": "agentdeck-task3-check",
+  "ticketId": "tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a",
+  "status": "failed",
+  "eventCount": 5,
+  "rawAgentRoles": [
+    "orchestrator"
+  ],
+  "replayFileCount": 0,
+  "beforeDigest": "3e112e9a2897887a8982f27839ffea1e95ce50627912ddb045d1064b79b8b5c1",
+  "afterDigest": "3e112e9a2897887a8982f27839ffea1e95ce50627912ddb045d1064b79b8b5c1",
+  "identical": true
+}

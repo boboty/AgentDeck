@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: agentdeck-local:task3
+    ports:
+      - "127.0.0.1:4317:4317"
+    environment:
+      HOST: 0.0.0.0
+      PORT: "4317"
+      AGENTDECK_CONTAINER: "1"
+      AGENTDECK_APP_ROOT: /app
+      AGENTDECK_DATA_DIR: /app/.agentdeck-data/runtime
+    volumes:
+      - runtime-data:/app/.agentdeck-data
+      - aboard-home:/home/node/.agent-board
+      - codex-home:/home/node/.codex
+      - type: bind
+        source: ${CODEX_AUTH_FILE:?Set CODEX_AUTH_FILE to the existing Codex auth.json}
+        target: /home/node/.codex/auth.json
+        read_only: true
+        bind:
+          create_host_path: false
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4317/api/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 8
+      start_period: 10s
+volumes:
+  runtime-data:
+  aboard-home:
+  codex-home:

@@ -1,0 +1,20 @@
+{
+  "currentSourceTree": "Task 3 current delivery candidate",
+  "checks": [
+    { "command": "npm run check", "result": "PASS", "details": "lint; backend/frontend typecheck; production build; 7/7 Node tests" },
+    { "command": "node scripts/http-smoke.mjs", "result": "PASS", "details": "health, home, 3 bundled recordings, replay, SSE" },
+    { "command": "PLAYWRIGHT_CHANNEL=chrome npx playwright test", "result": "PASS", "details": "3 UI tests passed; explicit live-model test skipped by default. An initial replay assertion hit a strict-locator ambiguity; the test was corrected to use exact matching and then passed." },
+    { "command": "AGENTDECK_LIVE_E2E=1 BASE_URL=http://127.0.0.1:4320 npx playwright test e2e/live-workflow.spec.ts", "result": "PASS", "details": "one real Web-submitted three-role workflow completed; saved response and screenshot" },
+    { "command": "docker compose -p agentdeck-task3-check up --build -d", "result": "PASS", "details": "official pinned base and Aboard release image built and app started" },
+    { "command": "node scripts/compose-smoke.mjs", "result": "PASS", "details": "healthy container, home, 3 recordings, replay and read-only auth mount" },
+    { "command": "CODEX_AUTH_FILE=$HOME/.codex/auth.json TICKET_ID=tkt_5c6b6260-b9a3-4c15-b09a-c863609cd67a node scripts/compose-restart-verify.mjs", "result": "PASS", "details": "failed provider-blocked ticket and event history remained byte-identical across Compose restart" },
+    { "command": "real Compose SDK workflow", "result": "BLOCKED_BY_ENVIRONMENT", "details": "actual Web-submitted attempt failed at provider workspace routing; see compose-live-attempt-failure.json and provider-reachability-diagnostics.json" },
+    { "command": "docker compose -p agentdeck-task3-check down -v", "result": "PASS", "details": "removed only the dedicated test project, network, and volumes; no containers or project volumes remain" }
+  ],
+  "temporaryResources": [
+    { "path": "/tmp/agentdeck-aboard-v0.2.3-arm64.tar.gz", "cleanup": "removed; confirmed absent" },
+    { "path": "/tmp/agentdeck-docker-config", "cleanup": "removed; confirmed absent" },
+    { "path": "Playwright test-results/", "cleanup": "gitignored; transient test output not included in delivery" }
+  ],
+  "npmWarnings": "Existing npm user configuration uses sass_binary_site, which npm 11 reports as an unknown/deprecated setting; checks still pass."
+}

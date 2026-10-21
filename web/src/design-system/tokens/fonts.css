@@ -1,0 +1,8 @@
+/* ============================================================
+   BenYan AI — Webfonts
+   Inter (UI + body), Manrope (display headings),
+   Noto Sans SC (Chinese), JetBrains Mono (data / code)
+   Loaded from Google Fonts. If you self-host, replace these
+   @import lines with local @font-face rules.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap');

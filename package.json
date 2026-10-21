@@ -8,24 +8,36 @@
   },
   "packageManager": "npm@11.6.2",
   "scripts": {
+    "dev": "vite --config web/vite.config.ts",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit && tsc -p web/tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.build.json && vite build --config web/vite.config.ts",
     "test": "node --test test/*.test.mjs",
     "check": "npm run lint && npm run typecheck && npm run build && npm test",
     "start": "node dist/server/index.js",
+    "smoke": "node scripts/http-smoke.mjs",
+    "smoke:sse-ui": "node scripts/sse-ui-smoke.mjs",
+    "e2e": "playwright test",
     "probe:sdk": "node dist/scripts/probe-codex-sdk.js",
     "fingerprint": "node scripts/content-fingerprint.mjs"
   },
   "dependencies": {
-    "@openai/codex-sdk": "0.163.0"
+    "@openai/codex-sdk": "0.163.0",
+    "react": "^19.1.10",
+    "react-dom": "^19.1.10",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@playwright/test": "^1.64.1",
     "@types/node": "24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
     "eslint": "10.13.0",
     "globals": "17.13.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.72.0"
+    "typescript-eslint": "8.72.0",
+    "vite": "^8.3.5"
   }
 }

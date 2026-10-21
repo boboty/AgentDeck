@@ -1,7 +1,8 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { createHash, randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { extname, resolve, sep } from "node:path";
+import { existsSync } from "node:fs";
 import { SCENARIOS, type Scenario, type Ticket } from "./domain.js";
 import { assertDevelopmentBoard } from "./aboard.js";
 import { RuntimeStore } from "./store.js";
@@ -10,7 +11,13 @@ import { executeCorrection, executeTicket } from "./workflow.js";
 const appRoot = resolve(process.env.AGENTDECK_APP_ROOT ?? process.cwd());
 const store = new RuntimeStore();
 const devBoard = assertDevelopmentBoard(appRoot);
-process.env.AGENTDECK_DEV_BOARD_ID = devBoard.project_id;
+if (devBoard) process.env.AGENTDECK_DEV_BOARD_ID = devBoard.project_id;
+else delete process.env.AGENTDECK_DEV_BOARD_ID;
+const bundledRecordings = [
+  { id: "success", title: "订单配送与退货期限", ticketId: "tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430", outcome: "PASS" },
+  { id: "correction", title: "重复投诉与纠正复核", ticketId: "tkt_e9048d2b-7f0c-400e-be26-2fdefd1c339d", outcome: "HUMAN_REVIEW" },
+  { id: "live", title: "现场运行：配送状态与退货期限", ticketId: "tkt_b2755e67-af0f-4eb5-99d9-dd132716b94a", outcome: "PASS" },
+];
 
 function requestId(request: IncomingMessage): string {
   const supplied = request.headers["x-request-id"];
@@ -132,8 +139,24 @@ async function handle(request: IncomingMessage, response: ServerResponse): Promi
   const path = url.pathname;
   let status = 200;
   try {
-    if (request.method === "GET" && path === "/health") {
-      json(response, 200, id, { status: "ok", service: "agentdeck-backend", api: "/api/v1", developmentBoardId: devBoard.project_id });
+    if (request.method === "GET" && (path === "/health" || path === "/api/v1/health")) {
+      json(response, 200, id, { status: "ok", service: "agentdeck-backend", api: "/api/v1", developmentBoardId: devBoard?.project_id ?? null });
+      return;
+    }
+    if (request.method === "GET" && path === "/api/v1/recordings") {
+      json(response, 200, id, bundledRecordings);
+      return;
+    }
+    const recordingMatch = path.match(/^\/api\/v1\/recordings\/([a-z-]+)\/replay$/);
+    if (request.method === "GET" && recordingMatch) {
+      const recording = bundledRecordings.find(({ id: recordingId }) => recordingId === recordingMatch[1]);
+      if (!recording) {
+        status = 404;
+        json(response, status, id, safeError("RECORDING_NOT_FOUND", "Recording was not found", id));
+        return;
+      }
+      const content = await readFile(resolve(appRoot, "server", "fixtures", "replays", `${recording.id}.json`), "utf8");
+      json(response, 200, id, JSON.parse(content) as unknown);
       return;
     }
     if (request.method === "GET" && path === "/api/v1/scenarios") {
@@ -263,6 +286,22 @@ async function handle(request: IncomingMessage, response: ServerResponse): Promi
       json(response, 200, id, ticket);
       return;
     }
+    if (request.method === "GET" && !path.startsWith("/api/") && !path.includes("..")) {
+      const webRoot = resolve(appRoot, "web", "dist");
+      const requested = path === "/" ? "index.html" : path.slice(1);
+      const target = resolve(webRoot, requested);
+      if (target.startsWith(`${webRoot}${sep}`) && existsSync(target)) {
+        const contentType: Record<string, string> = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2" };
+        response.writeHead(200, { "content-type": contentType[extname(target)] ?? "application/octet-stream", "x-request-id": id, "x-content-type-options": "nosniff" });
+        response.end(await readFile(target));
+        return;
+      }
+      if (existsSync(resolve(webRoot, "index.html"))) {
+        response.writeHead(200, { "content-type": "text/html; charset=utf-8", "x-request-id": id, "x-content-type-options": "nosniff" });
+        response.end(await readFile(resolve(webRoot, "index.html")));
+        return;
+      }
+    }
     status = 404;
     json(response, status, id, safeError("NOT_FOUND", "Route was not found", id));
   } catch (error) {
@@ -279,6 +318,7 @@ const server = createServer((request, response) => {
 });
 const port = Number(process.env.PORT ?? "4317");
 const host = process.env.HOST ?? "127.0.0.1";
-if (!Number.isInteger(port) || port < 1 || port > 65535 || host !== "127.0.0.1" && host !== "localhost") throw new Error("Server is local-only; HOST must be 127.0.0.1 or localhost");
+const allowedHost = host === "127.0.0.1" || host === "localhost" || process.env.AGENTDECK_CONTAINER === "1" && host === "0.0.0.0";
+if (!Number.isInteger(port) || port < 1 || port > 65535 || !allowedHost) throw new Error("Server is local-only; container mode may bind 0.0.0.0 behind a loopback-only host mapping");
 await store.initialize();
-server.listen(port, host, () => process.stdout.write(`${JSON.stringify({ at: new Date().toISOString(), level: "info", event: "server.started", host, port, api: "/api/v1", developmentBoardId: devBoard.project_id })}\n`));
+server.listen(port, host, () => process.stdout.write(`${JSON.stringify({ at: new Date().toISOString(), level: "info", event: "server.started", host, port, api: "/api/v1", developmentBoardId: devBoard?.project_id ?? null })}\n`));

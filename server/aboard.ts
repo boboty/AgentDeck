@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { realpathSync } from "node:fs";
+import { existsSync, realpathSync } from "node:fs";
 import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import type { AgentPlan, Ticket } from "./domain.js";
@@ -33,10 +33,16 @@ function identity(cwd: string): BoardIdentity {
   return { project_root: resolve(project_root), identity_path: resolve(identity_path), project_id, database_path: resolve(database_path) };
 }
 
-export function assertDevelopmentBoard(appRoot: string): BoardIdentity {
+export function assertDevelopmentBoard(appRoot: string): BoardIdentity | null {
   const expectedRoot = realpathSync(resolve(appRoot));
+  const gitDirectory = resolve(expectedRoot, ".git");
+  const expectedIdentityPath = resolve(gitDirectory, "agent-board.json");
+  if (!existsSync(gitDirectory)) {
+    if (process.env.AGENTDECK_CONTAINER === "1") return null;
+    throw new Error("development aboard identity is missing outside explicit container mode");
+  }
   const result = identity(expectedRoot);
-  if (result.project_root !== expectedRoot || result.identity_path !== resolve(expectedRoot, ".git", "agent-board.json")) {
+  if (result.project_root !== expectedRoot || result.identity_path !== expectedIdentityPath) {
     throw new Error("development aboard project identity does not match this application checkout");
   }
   return result;
@@ -72,9 +78,9 @@ export class IsolatedAboard {
     const canonicalWorkspace = realpathSync(workspace);
     const runtimeIdentity = identity(workspace);
     if (runtimeIdentity.project_root !== canonicalWorkspace
-      || runtimeIdentity.project_id === appIdentity.project_id
+      || (appIdentity !== null && runtimeIdentity.project_id === appIdentity.project_id)
       || runtimeIdentity.identity_path !== resolve(canonicalWorkspace, ".git", "agent-board.json")
-      || runtimeIdentity.database_path === appIdentity.database_path) {
+      || (appIdentity !== null && runtimeIdentity.database_path === appIdentity.database_path)) {
       throw new Error("runtime aboard workspace is not isolated from the development project");
     }
 
@@ -99,8 +105,8 @@ export class IsolatedAboard {
     const dev = assertDevelopmentBoard(appRoot);
     const canonicalWorkspace = realpathSync(workspace);
     const current = identity(canonicalWorkspace);
-    if (current.project_root !== canonicalWorkspace || current.project_id !== expectedProjectId || current.project_id === dev.project_id
-      || current.identity_path !== resolve(canonicalWorkspace, ".git", "agent-board.json") || current.database_path === dev.database_path) {
+    if (current.project_root !== canonicalWorkspace || current.project_id !== expectedProjectId || (dev !== null && current.project_id === dev.project_id)
+      || current.identity_path !== resolve(canonicalWorkspace, ".git", "agent-board.json") || (dev !== null && current.database_path === dev.database_path)) {
       throw new Error("stored runtime aboard identity does not match the isolated ticket workspace");
     }
     return new IsolatedAboard(appRoot, canonicalWorkspace, current, sourceSnapshotHash);
@@ -110,7 +116,7 @@ export class IsolatedAboard {
     const appIdentity = assertDevelopmentBoard(this.appRoot);
     const current = identity(this.workspace);
     if (current.project_id !== this.identity.project_id || current.project_root !== this.identity.project_root
-      || current.identity_path !== this.identity.identity_path || current.database_path === appIdentity.database_path) {
+      || current.identity_path !== this.identity.identity_path || (appIdentity !== null && current.database_path === appIdentity.database_path)) {
       throw new Error("runtime aboard identity changed or points at the development board");
     }
   }

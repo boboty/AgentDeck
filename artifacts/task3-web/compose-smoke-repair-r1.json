@@ -1,0 +1,42 @@
+{
+  "result": "PASS",
+  "project": "agentdeck-task3-check",
+  "health": {
+    "status": "ok",
+    "service": "agentdeck-backend",
+    "api": "/api/v1",
+    "developmentBoardId": null
+  },
+  "imageId": "sha256:82905984e752eada2a71b0b4cde0e77c77a6c16b03b9e431bad44e76acedd8a5",
+  "container": "{\"Command\":\"\\\"docker-entrypoint.s…\\\"\",\"CreatedAt\":\"2026-10-22 03:55:50 +0800 CST\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"aa2f556e92e8\",\"Image\":\"agentdeck-local:task3\",\"Labels\":\"com.docker.compose.image=sha256:82905984e752eada2a71b0b4cde0e77c77a6c16b03b9e431bad44e76acedd8a5,com.docker.compose.project=agentdeck-task3-check,com.docker.compose.project.config_files=/Users/yanbo/Github/AgentDeck/docker-compose.yml,com.docker.compose.project.working_dir=/Users/yanbo/Github/AgentDeck,com.docker.compose.version=5.1.2,com.docker.compose.config-hash=64689d30d3a2bf26c47283301379e08bb286e09d45caa0c693c1ef03bd77a461,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.oneoff=False,com.docker.compose.service=app\",\"LocalVolumes\":\"3\",\"Mounts\":\"/Users/yanbo/.…,agentdeck-task…,agentdeck-task…,agentdeck-task…\",\"Name\":\"agentdeck-task3-check-app-1\",\"Names\":\"agentdeck-task3-check-app-1\",\"Networks\":\"agentdeck-task3-check_default\",\"Ports\":\"127.0.0.1:4317-\\u003e4317/tcp\",\"Project\":\"agentdeck-task3-check\",\"Publishers\":[{\"URL\":\"127.0.0.1\",\"TargetPort\":4317,\"PublishedPort\":4317,\"Protocol\":\"tcp\"}],\"RunningFor\":\"3 seconds ago\",\"Service\":\"app\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 2 seconds (health: starting)\"}",
+  "authMount": {
+    "destination": "/home/node/.codex/auth.json",
+    "readOnly": true
+  },
+  "checks": [
+    {
+      "path": "/api/v1/health",
+      "status": 200,
+      "requestId": "req_ef5bd353-2eb1-49cb-a188-1b43c967bc13",
+      "ok": true
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "requestId": "req_01b253b7-aa83-4008-9eb8-a4bd4646998c",
+      "ok": true
+    },
+    {
+      "path": "/api/v1/recordings",
+      "status": 200,
+      "requestId": "req_5bfbc377-da5a-4006-872d-43a79dbfbbc8",
+      "ok": true
+    },
+    {
+      "path": "/api/v1/recordings/success/replay",
+      "status": 200,
+      "requestId": "req_f157a49c-80e6-4926-b5fd-c24911802017",
+      "ok": true
+    }
+  ]
+}
