@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+content-type: application/json; charset=utf-8
+x-request-id: req_5f6d7650-6260-4fc5-9ab5-1bd762257325
+cache-control: no-store
+x-content-type-options: nosniff
+Date: Wed, 21 Oct 2026 19:03:19 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+

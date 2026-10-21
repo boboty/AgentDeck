@@ -1,0 +1,45 @@
+npm run check
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 check
+> npm run lint && npm run typecheck && npm run build && npm test
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 lint
+> eslint .
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 build
+> tsc -p tsconfig.build.json
+
+npm warn Unknown env config "sass-binary-site". This will stop working in the next major version of npm.
+npm warn Unknown user config "sass_binary_site". This will stop working in the next major version of npm.
+
+> agentdeck@0.1.0 test
+> node --test test/*.test.mjs
+
+✔ demo workspace uses a distinct aboard database and legal state/fact transitions (822.722ms)
+✔ raw SDK events are appended as independent JSONL records (5.756209ms)
+✔ tool summaries include command events without rewriting their source record (0.16775ms)
+✔ query output must be byte-snapshot bound and exact, not trust a repeated hash field (0.531584ms)
+✔ date arithmetic is deterministic and an unqueried history remains unknown (0.527958ms)
+✔ recommendation citations are restricted to records actually queried and cannot promise a completed refund (0.194708ms)
+✔ event replay reads persisted JSONL without adding records or changing ticket state (11.477208ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 873.40225

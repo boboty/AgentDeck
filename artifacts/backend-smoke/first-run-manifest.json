@@ -1,0 +1,10 @@
+{
+  "ticketId": "tkt_4455fc36-7b4f-42db-ab34-314ff5b3a9e7",
+  "runtimeProjectId": "01M5FXJ3DE4Y9NC6S9FW9PD050",
+  "runtimeTaskId": "01M5FXJ3HGP95KNXCKGJKSYDWM",
+  "verdict": "PASS",
+  "sourceSnapshotHash": "36ea969b1ed7ed1f41763b2c4252579d48779eeb40c57f931685bd920eeaaca7",
+  "resultHash": "45e028d53d361efcf3ea330fb04adfaae9cd3f15b388a54882e8af512e517096",
+  "finalAcceptanceEvidence": false,
+  "diagnosticReason": "Initial implementation represented unqueried history as an empty set; verifier phrasing inferred absence without a history query. Immutable run preserved; corrected data model distinguishes unknown from verified empty history and next run is final evidence."
+}

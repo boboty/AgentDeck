@@ -1,0 +1,10 @@
+HTTP/1.1 202 Accepted
+content-type: application/json; charset=utf-8
+x-request-id: smoke-run-0002
+cache-control: no-store
+x-content-type-options: nosniff
+Date: Wed, 21 Oct 2026 19:06:49 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+

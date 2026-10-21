@@ -1,0 +1,10 @@
+HTTP/1.1 201 Created
+content-type: application/json; charset=utf-8
+x-request-id: smoke-create-0003
+cache-control: no-store
+x-content-type-options: nosniff
+Date: Wed, 21 Oct 2026 19:08:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+

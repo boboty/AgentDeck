@@ -1,0 +1,15 @@
+{
+  "afterRestart": true,
+  "successReplaySameBytes": true,
+  "correctionReplaySameBytes": true,
+  "successReplaySha256": "523bc04160f6e415081271c5fdeb19f68b6e717a6ac5d9ef034c246e192fca5e",
+  "correctionReplaySha256": "6a1873670d52b3773383f5fb4d69f52aa4150fb280f961a29c973feedf43c263",
+  "correctionEventCount": 35,
+  "correctionTicketStatus": "failed",
+  "originalArtifactHashStable": true,
+  "correctionHashStable": true,
+  "rawCorrectionRoles": [
+    "worker",
+    "verifier"
+  ]
+}

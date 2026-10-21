@@ -1,0 +1,10 @@
+HTTP/1.1 202 Accepted
+content-type: application/json; charset=utf-8
+x-request-id: req_a7988576-5d9d-4d22-84fb-32f4bda4a6ab
+cache-control: no-store
+x-content-type-options: nosniff
+Date: Wed, 21 Oct 2026 19:11:32 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+

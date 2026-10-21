@@ -1,0 +1,72 @@
+id: 1
+event: ticket.created
+data: {"id":1,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:15.404Z","type":"ticket.created","role":"system","data":{"scenario":"ordinary","text":"请帮林女士确认订单 OD-24081 的配送状态，以及当前退货申请期限。"}}
+
+id: 2
+event: ticket.run_requested
+data: {"id":2,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:17.439Z","type":"ticket.run_requested","role":"system","data":{"requestId":"smoke-run-0003","testInjection":null}}
+
+id: 3
+event: ticket.queued
+data: {"id":3,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:17.441Z","type":"ticket.queued","role":"system","data":{"queue":"local-demo"}}
+
+id: 4
+event: agent.completed
+data: {"id":4,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:31.155Z","type":"agent.completed","role":"orchestrator","data":{"threadId":"01a15fdd-3ed4-7260-9421-1be82d0a5566","model":"configured-default","reasoningEffort":"configured-default","rawEventFile":"tickets/tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430/agents/orchestrator.jsonl","rawEventCount":4,"toolEventCount":0}}
+
+id: 5
+event: plan.validated
+data: {"id":5,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:31.156Z","type":"plan.validated","role":"orchestrator","data":{"summary":"查询订单配送信息与适用退货政策，为确认配送状态和当前退货申请期限提供依据。","queries":["orders","policies"],"taskTitle":"核查配送状态与退货期限依据","acceptanceCriteria":["查询订单 OD-24081，记录配送状态及来源记录中的更新时间。","提取订单中与退货期限有关的日期字段，并标明缺失信息。","查明适用退货政策，列出期限、起算条件及政策来源，供程序核算。"]}}
+
+id: 6
+event: orchestrator.plan
+data: {"id":6,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:31.156Z","type":"orchestrator.plan","role":"orchestrator","data":{"threadId":"01a15fdd-3ed4-7260-9421-1be82d0a5566","plan":{"summary":"查询订单配送信息与适用退货政策，为确认配送状态和当前退货申请期限提供依据。","orderId":"OD-24081","customer":"林女士","queries":["orders","policies"],"taskTitle":"核查配送状态与退货期限依据","acceptanceCriteria":["查询订单 OD-24081，记录配送状态及来源记录中的更新时间。","提取订单中与退货期限有关的日期字段，并标明缺失信息。","查明适用退货政策，列出期限、起算条件及政策来源，供程序核算。"]}}}
+
+id: 7
+event: board.isolated
+data: {"id":7,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:31.286Z","type":"board.isolated","role":"system","data":{"projectId":"01M5FXTX4C3SR8BK5HYNR2039Z","projectRoot":"/Users/yanbo/Github/AgentDeck/.agentdeck-data/runtime/runs/tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430/workspace","identityPath":"/Users/yanbo/Github/AgentDeck/.agentdeck-data/runtime/runs/tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430/workspace/.git/agent-board.json","databasePath":"/Users/yanbo/.agent-board/01M5FXTX4C3SR8BK5HYNR2039Z/board.db","developmentBoardId":"01M5FTPVNK6VA9TJ44SK9VWV99","sourceSnapshotHash":"36ea969b1ed7ed1f41763b2c4252579d48779eeb40c57f931685bd920eeaaca7"}}
+
+id: 8
+event: task.in_progress
+data: {"id":8,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:31.649Z","type":"task.in_progress","role":"system","data":{"id":"01M5FXTX82XMMFZV4RRP1JHK05","number":1,"projectId":"01M5FXTX4C3SR8BK5HYNR2039Z","state":"IN_PROGRESS","version":3}}
+
+id: 9
+event: agent.tool
+data: {"id":9,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:38.008Z","type":"agent.tool","role":"worker","data":{"eventType":"item.started","itemType":"command_execution","name":"/bin/zsh -lc 'node ./tools/query-tool.mjs orders'","status":"in_progress"}}
+
+id: 10
+event: agent.tool
+data: {"id":10,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:38.009Z","type":"agent.tool","role":"worker","data":{"eventType":"item.completed","itemType":"command_execution","name":"/bin/zsh -lc 'node ./tools/query-tool.mjs orders'","status":"completed","exitCode":0}}
+
+id: 11
+event: agent.tool
+data: {"id":11,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:39.405Z","type":"agent.tool","role":"worker","data":{"eventType":"item.started","itemType":"command_execution","name":"/bin/zsh -lc 'node ./tools/query-tool.mjs policies'","status":"in_progress"}}
+
+id: 12
+event: agent.tool
+data: {"id":12,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:39.406Z","type":"agent.tool","role":"worker","data":{"eventType":"item.completed","itemType":"command_execution","name":"/bin/zsh -lc 'node ./tools/query-tool.mjs policies'","status":"completed","exitCode":0}}
+
+id: 13
+event: agent.completed
+data: {"id":13,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:47.725Z","type":"agent.completed","role":"worker","data":{"threadId":"01a15fdd-7695-74d3-8876-8e42935846f2","model":"gpt-6-luna","reasoningEffort":"high","rawEventFile":"tickets/tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430/agents/worker.jsonl","rawEventCount":9,"toolEventCount":4}}
+
+id: 14
+event: worker.proposal
+data: {"id":14,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:47.821Z","type":"worker.proposal","role":"worker","data":{"summary":"订单 OD-24081 显示已于 2026-10-19 14:22 签收，当前退货申请期限至 2026-10-26。","disposition":"information","citations":[{"sourceId":"OD-24081","reason":"订单记录提供签收状态、时间、物流单号及退货申请期限。"},{"sourceId":"RET-01","reason":"说明已签收商品退货申请的期限及商品、包装完整要求。"}],"sourceSnapshotHash":"36ea969b1ed7ed1f41763b2c4252579d48779eeb40c57f931685bd920eeaaca7","resultArtifact":"tickets/tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430/recommendation.json"}}
+
+id: 15
+event: verifier.programmatic
+data: {"id":15,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:08:47.822Z","type":"verifier.programmatic","role":"verifier","data":{"checks":[{"name":"snapshot-binding","verdict":"PASS","evidence":"36ea969b1ed7ed1f41763b2c4252579d48779eeb40c57f931685bd920eeaaca7"},{"name":"tool-output-source-equivalence","verdict":"PASS","evidence":"2/2 exact source-query results"},{"name":"source-citations","verdict":"PASS","evidence":"OD-24081,RET-01"},{"name":"deterministic-rules-and-history-unknown","verdict":"PASS","evidence":"{\"daysSinceDelivery\":2,\"ticketDate\":\"2026-10-21\",\"returnEligible\":true,\"historyQueried\":false,\"matchingHistoryCases\":null}"},{"name":"rule-evidence","verdict":"PASS","evidence":"RET-01,CS-04,CS-07,RET-09"},{"name":"conflict-boundary","verdict":"PASS","evidence":"disposition=information; conflictSources=false"},{"name":"no-unauthorized-promise","verdict":"PASS","evidence":"No simulated recommendation may claim an executed financial action."}]}}
+
+id: 16
+event: agent.completed
+data: {"id":16,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:09:06.923Z","type":"agent.completed","role":"verifier","data":{"threadId":"01a15fdd-b576-7330-92bb-8cbe03523c19","model":"gpt-6-luna","reasoningEffort":"high","rawEventFile":"tickets/tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430/agents/verifier.jsonl","rawEventCount":4,"toolEventCount":0}}
+
+id: 17
+event: verifier.semantic
+data: {"id":17,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:09:06.924Z","type":"verifier.semantic","role":"verifier","data":{"verdict":"PASS","rationale":"The recommendation answers both parts of the ticket with order-specific delivery evidence and the recorded return deadline. It states the seven-calendar-day window and item/packaging condition without promising approval or a refund. It makes no claim about prior contacts; because history was not queried, that remains unknown.","criteria":[{"criterion":"Answers the delivery-status question with order-specific evidence","verdict":"PASS","evidence":"OD-24081 records the order as delivered at 2026-10-19 14:22 with tracking SF1428097712; the draft reports those details."},{"criterion":"Answers the current return-deadline question and states the applicable policy without overpromising","verdict":"PASS","evidence":"OD-24081 records returnEligibleUntil as 2026-10-26; RET-01 sets a seven-calendar-day application window and requires the item and packaging to remain intact. The draft reports the deadline and policy without promising acceptance or a refund."},{"criterion":"Handles the try-on ambiguity without asserting an unsupported refund outcome","verdict":"PASS","evidence":"RET-09 says intact packaging alone does not establish eligibility for a tried-on item and bars promising a full refund on that basis. The draft does not claim that packaging proves eligibility or promise a refund; it provides the deadline and general condition."},{"criterion":"Avoids unsupported claims about repeat-contact history","verdict":"PASS","evidence":"History was not queried (matchingHistoryCases is null). The draft does not say there are no prior cases or claim that this is not a repeat contact. CS-04 applies conditionally when the same customer contacts again about the same issue."}],"threadId":"01a15fdd-b576-7330-92bb-8cbe03523c19","resultHash":"3c8e3c7398c553e2243002c05b73b88955a818d42f524988f2fab85cc3735da9","resultArtifact":"tickets/tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430/result.json"}}
+
+id: 18
+event: ticket.completed
+data: {"id":18,"ticket_id":"tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430","at":"2026-10-21T19:09:07.208Z","type":"ticket.completed","role":"system","data":{"verdict":"PASS","resultHash":"3c8e3c7398c553e2243002c05b73b88955a818d42f524988f2fab85cc3735da9","sourceSnapshotHash":"36ea969b1ed7ed1f41763b2c4252579d48779eeb40c57f931685bd920eeaaca7"}}
+

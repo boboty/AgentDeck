@@ -1,0 +1,63 @@
+{
+  "task": "AgentDeck backend Task #2",
+  "phase": "backend-only; Web UI and Compose belong to Task #3",
+  "sourceSnapshotHash": "36ea969b1ed7ed1f41763b2c4252579d48779eeb40c57f931685bd920eeaaca7",
+  "successfulRealRun": {
+    "ticketId": "tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430",
+    "aboardProjectId": "01M5FXTX4C3SR8BK5HYNR2039Z",
+    "aboardTaskId": "01M5FXTX82XMMFZV4RRP1JHK05",
+    "verdict": "PASS",
+    "resultHash": "3c8e3c7398c553e2243002c05b73b88955a818d42f524988f2fab85cc3735da9",
+    "sourceQueries": [
+      "orders",
+      "policies"
+    ],
+    "unqueriedHistory": "unknown; matchingHistoryCases=null",
+    "runtimeEvidence": "final-success-replay.json",
+    "sseEvidence": "final-success-events.sse",
+    "postRestartReplay": "restart-verification.json",
+    "rawSdkEvents": [
+      "orchestrator.jsonl",
+      "worker.jsonl",
+      "verifier.jsonl"
+    ]
+  },
+  "boundedCorrectionRun": {
+    "ticketId": "tkt_e9048d2b-7f0c-400e-be26-2fdefd1c339d",
+    "aboardProjectId": "01M5FXRB00QMD5ANJRK902A7Z9",
+    "originalTaskId": "01M5FXRB3SFZ4VHHSFF1CNTWTQ",
+    "originalVerdict": "FAIL",
+    "originalAboardVerdict": "RC",
+    "originalResultHash": "26556addf0e0a9bd6d5d54ecca416f23c3dcb0c47eaa6f498e83e4f545042987",
+    "correctionTaskId": "01M5FXSK2TS3NC16R28CWK3HPQ",
+    "correctionVerdict": "FAIL",
+    "correctionState": "BLOCKED",
+    "correctionResultHash": "fc7a1fa4c40a0870e5ba550564a2ef4e5f5e5901b9676694549270b512415677",
+    "maxAttempts": 1,
+    "nextStep": "human_review",
+    "runtimeEvidence": "correction-final-replay.json",
+    "sseEvidence": "correction-events.sse",
+    "retryRejection": "correction-repeat.json (HTTP 409; no second attempt)",
+    "postRestartReplay": "restart-verification.json",
+    "originalAttemptImmutable": true
+  },
+  "diagnosticOnlyRuns": [
+    "first-run-manifest.json"
+  ],
+  "httpAndReplayEvidence": [
+    "health.headers",
+    "scenarios.json",
+    "create.json",
+    "run.json",
+    "corrected-create.json",
+    "corrected-fail-replay.json",
+    "correction-run.json",
+    "correction-final-replay.json",
+    "final-success-replay.json",
+    "correction-events.sse",
+    "final-success-events.sse",
+    "restart-health.json",
+    "restart-verification.json"
+  ],
+  "scope": "Synthetic local data only. No real customer response, order change, or financial action was performed. Runtime tasks use source/result hashes, not Git baselines."
+}

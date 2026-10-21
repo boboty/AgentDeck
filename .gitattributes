@@ -1,0 +1,2 @@
+# Preserve captured HTTP response headers byte-for-byte for delivery fingerprinting.
+artifacts/backend-smoke/*.headers -text
