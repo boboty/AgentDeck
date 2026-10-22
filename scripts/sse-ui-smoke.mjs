@@ -71,14 +71,14 @@ try {
     result.observed.push({ type, expected: count, displayed: observedCount, text });
   }
   result.result = 'PASS';
-  await mkdir(resolve(root, 'artifacts/task3-web'), { recursive: true });
-  await writeFile(resolve(root, 'artifacts/task3-web/live-sse-ui-smoke.json'), `${JSON.stringify(result, null, 2)}\n`);
+  await mkdir(resolve(root, 'artifacts/task4-config'), { recursive: true });
+  await writeFile(resolve(root, 'artifacts/task4-config/live-sse-ui-smoke.json'), `${JSON.stringify(result, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
 } catch (error) {
   result.error = error instanceof Error ? error.message : String(error);
   result.serverLogs = logs;
-  await mkdir(resolve(root, 'artifacts/task3-web'), { recursive: true });
-  await writeFile(resolve(root, 'artifacts/task3-web/live-sse-ui-smoke.json'), `${JSON.stringify(result, null, 2)}\n`);
+  await mkdir(resolve(root, 'artifacts/task4-config'), { recursive: true });
+  await writeFile(resolve(root, 'artifacts/task4-config/live-sse-ui-smoke.json'), `${JSON.stringify(result, null, 2)}\n`);
   throw error;
 } finally {
   await browser?.close();

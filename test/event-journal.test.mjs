@@ -20,6 +20,22 @@ test("raw SDK events are appended as independent JSONL records", async () => {
   }
 });
 
+test("raw SDK error events redact an echoed provider key before persistence", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "agentdeck-event-journal-secret-"));
+  const path = join(directory, "run", "events.jsonl");
+  const apiKey = "fake-error-event-only-never-a-real-secret";
+  const event = { type: "error", message: `Upstream rejected ${apiKey}` };
+
+  try {
+    await appendRawEvent(path, event, apiKey);
+    const saved = await readFile(path, "utf8");
+    assert.ok(!saved.includes(apiKey));
+    assert.deepEqual(JSON.parse(saved), { type: "error", message: "Upstream rejected [REDACTED]" });
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 test("tool summaries include command events without rewriting their source record", () => {
   const event = {
     type: "item.completed",

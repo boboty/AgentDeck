@@ -36,7 +36,9 @@ export function summarizeToolEvent(event: ThreadEvent): ToolEventSummary | undef
   return undefined;
 }
 
-export async function appendRawEvent(path: string, event: ThreadEvent): Promise<void> {
+export async function appendRawEvent(path: string, event: ThreadEvent, secret?: string): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
-  await appendFile(path, `${JSON.stringify(event)}\n`, { encoding: "utf8", mode: 0o600 });
+  const serialized = JSON.stringify(event);
+  const safeSerialized = secret ? serialized.split(secret).join("[REDACTED]") : serialized;
+  await appendFile(path, `${safeSerialized}\n`, { encoding: "utf8", mode: 0o600 });
 }

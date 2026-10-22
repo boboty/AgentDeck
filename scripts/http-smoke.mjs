@@ -5,8 +5,15 @@ import { resolve } from 'node:path';
 
 const port = 4391;
 const dataDir = await mkdtemp(resolve(tmpdir(), 'agentdeck-http-smoke-'));
-await mkdir('artifacts/task3-web', { recursive: true });
-const child = spawn(process.execPath, ['dist/server/index.js'], { env: { ...process.env, HOST: '127.0.0.1', PORT: String(port), AGENTDECK_APP_ROOT: process.cwd(), AGENTDECK_DATA_DIR: dataDir }, stdio: ['ignore', 'pipe', 'pipe'] });
+await mkdir('artifacts/task4-config', { recursive: true });
+const childEnvironment = { ...process.env };
+for (const key of Object.keys(childEnvironment)) if (key.startsWith('AGENTDECK_') || key === 'DEEPSEEK_API_KEY') delete childEnvironment[key];
+Object.assign(childEnvironment, {
+  HOST: '127.0.0.1', PORT: String(port), AGENTDECK_APP_ROOT: process.cwd(), AGENTDECK_DATA_DIR: dataDir,
+  AGENTDECK_MODEL_PROVIDER: 'codex', AGENTDECK_MODEL_BASE_URL: '', AGENTDECK_MODEL: '', AGENTDECK_MODEL_EFFORT: '', DEEPSEEK_API_KEY: '',
+  AGENTDECK_ORCHESTRATOR_MODEL: '', AGENTDECK_ORCHESTRATOR_EFFORT: '', AGENTDECK_WORKER_MODEL: '', AGENTDECK_WORKER_EFFORT: '', AGENTDECK_VERIFIER_MODEL: '', AGENTDECK_VERIFIER_EFFORT: '',
+});
+const child = spawn(process.execPath, ['dist/server/index.js'], { env: childEnvironment, stdio: ['ignore', 'pipe', 'pipe'] });
 let logs = '';
 child.stdout.on('data', chunk => { logs += chunk.toString(); });
 child.stderr.on('data', chunk => { logs += chunk.toString(); });
@@ -43,10 +50,10 @@ try {
   const firstEvent = new TextDecoder().decode(first.value);
   records.push({ name: 'sse-live-event', status: stream.status, ticketId: ticket.id, hasCreated: firstEvent.includes('ticket.created') });
   if (stream.status !== 200 || !firstEvent.includes('ticket.created')) throw new Error('SSE event missing');
-  await writeFile('artifacts/task3-web/http-smoke.json', `${JSON.stringify({ result: 'PASS', checks: records }, null, 2)}\n`);
+  await writeFile('artifacts/task4-config/http-smoke.json', `${JSON.stringify({ result: 'PASS', checks: records }, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(records, null, 2)}\n`);
 } catch (error) {
-  await writeFile('artifacts/task3-web/http-smoke.json', `${JSON.stringify({ result: 'FAIL', checks: records, error: error instanceof Error ? error.message : String(error), logs }, null, 2)}\n`);
+  await writeFile('artifacts/task4-config/http-smoke.json', `${JSON.stringify({ result: 'FAIL', checks: records, error: error instanceof Error ? error.message : String(error), logs }, null, 2)}\n`);
   throw error;
 } finally {
   child.kill('SIGTERM');

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { mkdir } from 'node:fs/promises';
 
 test('bundled replay is readable and does not turn into a live task', async ({ page }) => {
   const created: string[] = [];
@@ -14,11 +15,14 @@ test('bundled replay is readable and does not turn into a live task', async ({ p
   await page.getByRole('button', { name: /现场运行：配送状态与退货期限/ }).click();
   await expect(page.getByText('tkt_b2755e67-af0f-4eb5-99d9-dd132716b94a', { exact: true })).toBeVisible();
   await expect(page.getByText('512304d0279b4269b0ad318c1c8f1682ebdcadc646b55a0046254a31de2b794c', { exact: true })).toBeVisible();
+  const correctionReplay = page.waitForResponse(response => response.url().endsWith('/api/v1/recordings/correction/replay'));
   await page.getByRole('button', { name: /重复投诉与纠正复核/ }).click();
-  await expect(page.getByText('需人工复核')).toBeVisible();
+  expect((await (await correctionReplay).json()).ticket.status).toBe('failed');
+  await expect(page.getByText('回放', { exact: true })).toBeVisible();
   await expect(page.getByText('HUMAN REVIEW')).toBeVisible();
   expect(created).toEqual([]);
-  await page.screenshot({ path: 'artifacts/task3-web/replay.png', fullPage: true });
+  await mkdir('artifacts/task4-config', { recursive: true });
+  await page.screenshot({ path: 'artifacts/task4-config/replay.png', fullPage: true });
 });
 
 test('system status presents successful and failed health checks', async ({ page }) => {

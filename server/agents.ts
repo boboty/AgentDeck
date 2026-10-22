@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { relative, resolve } from "node:path";
 import { Codex, type ThreadEvent } from "@openai/codex-sdk";
+import { getRuntimeConfig } from "./config.js";
 import { appendRawEvent, summarizeToolEvent } from "../src/runtime/event-journal.js";
 import type { AgentPlan, Recommendation, RuntimeEvent, SemanticReview, Ticket } from "./domain.js";
 import { IsolatedAboard } from "./aboard.js";
@@ -61,7 +62,6 @@ interface RunAgentArgs {
   ticket: Ticket;
   prompt: string;
   outputSchema: unknown;
-  modelRequired?: boolean;
 }
 
 async function runAgent<T>(args: RunAgentArgs): Promise<{ value: T; threadId: string; events: ThreadEvent[]; toolEvents: RuntimeEvent[] }> {
@@ -71,8 +71,23 @@ async function runAgent<T>(args: RunAgentArgs): Promise<{ value: T; threadId: st
   const rawPath = resolve(rawDirectory, `${args.role}.jsonl`);
   const rawEvents: ThreadEvent[] = [];
   const toolEvents: RuntimeEvent[] = [];
-  const thread = new Codex().startThread({
-    ...(args.modelRequired ? { model: "gpt-6-luna", modelReasoningEffort: "high" as const } : {}),
+  const modelConfig = getRuntimeConfig()[args.role];
+  const isolatedCodexHome = resolve(args.store.root, "codex-home-deepseek");
+  if (modelConfig.provider === "deepseek") await mkdir(isolatedCodexHome, { recursive: true, mode: 0o700 });
+  const codexOptions = modelConfig.provider === "deepseek" ? {
+    config: {
+      model_provider: "deepseek",
+      web_search: "disabled",
+      shell_environment_policy: { ignore_default_excludes: false, exclude: ["DEEPSEEK_API_KEY"] },
+      model_providers: {
+        deepseek: { name: "DeepSeek", base_url: modelConfig.baseUrl!, env_key: "DEEPSEEK_API_KEY", wire_api: "responses" },
+      },
+    },
+    env: isolatedProviderEnvironment(modelConfig.apiKey!, isolatedCodexHome),
+  } : { env: codexEnvironmentWithoutDeepSeekKey() };
+  const thread = new Codex(codexOptions).startThread({
+    ...(modelConfig.model ? { model: modelConfig.model } : {}),
+    ...(modelConfig.effort ? { modelReasoningEffort: modelConfig.effort } : {}),
     workingDirectory: args.workspace,
     sandboxMode: "read-only",
     approvalPolicy: "never",
@@ -84,7 +99,7 @@ async function runAgent<T>(args: RunAgentArgs): Promise<{ value: T; threadId: st
   let finalText = "";
   for await (const event of events) {
     rawEvents.push(event);
-    await appendRawEvent(rawPath, event);
+    await appendRawEvent(rawPath, event, modelConfig.provider === "deepseek" ? modelConfig.apiKey : undefined);
     const tool = summarizeToolEvent(event);
     if (tool) {
       const data = { ...tool, ...(event.type !== "item.started" && "item" in event && event.item.type === "command_execution" ? { exitCode: event.item.exit_code ?? null } : {}) };
@@ -104,12 +119,25 @@ async function runAgent<T>(args: RunAgentArgs): Promise<{ value: T; threadId: st
   const threadId = rawEvents.find((event) => event.type === "thread.started")?.thread_id ?? thread.id;
   if (!threadId) throw new Error(`${args.role} thread ID was not recorded`);
   await writeFile(resolve(rawDirectory, `${args.role}.result.json`), `${JSON.stringify(value, null, 2)}\n`, { mode: 0o600 });
-  await args.store.appendEvent(args.ticket, "agent.completed", args.role, { provider: "openai-codex", operation: "runStreamed", durationMs: Date.now() - startedAt, result: "success", retryCount: 0, threadId, model: args.modelRequired ? "gpt-6-luna" : "configured-default", reasoningEffort: args.modelRequired ? "high" : "configured-default", rawEventFile: relative(args.store.root, rawPath).split("\\").join("/"), rawEventCount: rawEvents.length, toolEventCount: toolEvents.length });
+  await args.store.appendEvent(args.ticket, "agent.completed", args.role, { provider: modelConfig.provider === "deepseek" ? "deepseek" : "openai-codex", operation: "runStreamed", durationMs: Date.now() - startedAt, result: "success", retryCount: 0, threadId, model: modelConfig.model ?? null, reasoningEffort: modelConfig.effort ?? null, rawEventFile: relative(args.store.root, rawPath).split("\\").join("/"), rawEventCount: rawEvents.length, toolEventCount: toolEvents.length });
   return { value, threadId, events: rawEvents, toolEvents };
   } catch (error) {
-    await args.store.appendEvent(args.ticket, "agent.failed", args.role, { provider: "openai-codex", operation: "runStreamed", durationMs: Date.now() - startedAt, result: "error", retryCount: 0, errorType: error instanceof Error ? error.name : "UnknownError" });
+    await args.store.appendEvent(args.ticket, "agent.failed", args.role, { provider: modelConfig.provider === "deepseek" ? "deepseek" : "openai-codex", operation: "runStreamed", durationMs: Date.now() - startedAt, result: "error", retryCount: 0, model: modelConfig.model ?? null, reasoningEffort: modelConfig.effort ?? null, errorType: error instanceof Error ? error.name : "UnknownError" });
     throw error;
   }
+}
+
+export function isolatedProviderEnvironment(apiKey: string, codexHome: string, source: NodeJS.ProcessEnv = process.env): Record<string, string> {
+  const forwarded = ["PATH", "HOME", "TMPDIR", "TMP", "TEMP", "SSL_CERT_FILE", "SSL_CERT_DIR", "HTTPS_PROXY", "HTTP_PROXY", "NO_PROXY"];
+  const env: Record<string, string> = { DEEPSEEK_API_KEY: apiKey, CODEX_HOME: codexHome };
+  for (const key of forwarded) if (source[key]) env[key] = source[key]!;
+  return env;
+}
+
+function codexEnvironmentWithoutDeepSeekKey(): Record<string, string> {
+  const env = Object.fromEntries(Object.entries(process.env).filter((entry): entry is [string, string] => entry[1] !== undefined));
+  delete env.DEEPSEEK_API_KEY;
+  return env;
 }
 
 const allowedQueries = new Set(["orders", "history", "policies", "conflictCases"]);
@@ -174,7 +202,7 @@ export async function runWorker(store: RuntimeStore, ticket: Ticket, plan: Agent
     ...(correction?.previousDraft ? [`Prior proposal to correct (read-only reference): ${correction.previousDraft}`] : []),
     `Source snapshot SHA-256: ${board.sourceSnapshotHash}`,
   ].join("\n");
-  const result = await runAgent<Recommendation>({ role: "worker", workspace: board.workspace, runDirectory, store, ticket, prompt, outputSchema: recommendationSchema, modelRequired: true });
+  const result = await runAgent<Recommendation>({ role: "worker", workspace: board.workspace, runDirectory, store, ticket, prompt, outputSchema: recommendationSchema });
   const calls = extractQueryCalls(result.events);
   for (const query of plan.queries) {
     const call = calls.find((row) => row.command.includes(`query-tool.mjs ${query}`));
@@ -255,7 +283,7 @@ export async function runVerifier(store: RuntimeStore, ticket: Ticket, board: Is
   let threadId: string | null = null;
   if (!failed.length) {
   const result = await runAgent<SemanticReview>({
-    role: "verifier", workspace: board.workspace, runDirectory, store, ticket, outputSchema: reviewSchema, modelRequired: true,
+    role: "verifier", workspace: board.workspace, runDirectory, store, ticket, outputSchema: reviewSchema,
     prompt: [
       "You are an independent semantic verifier with a new context. Judge whether this non-code customer-support recommendation sufficiently addresses the ticket and handles ambiguity without overpromising.",
       "The deterministic program checks below already passed; do not redo date arithmetic, infer missing source facts, or alter any artifact. Cite the evidence IDs in your criteria. Return PASS only if the recommendation answers the ticket, handles repeat-contact/conflicting policy where applicable, and is safe for a customer-facing draft. Otherwise return FAIL with specific findings.",

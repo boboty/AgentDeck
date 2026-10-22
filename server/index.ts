@@ -5,10 +5,12 @@ import { extname, resolve, sep } from "node:path";
 import { existsSync } from "node:fs";
 import { SCENARIOS, type Scenario, type Ticket } from "./domain.js";
 import { assertDevelopmentBoard } from "./aboard.js";
+import { initializeRuntimeConfig } from "./config.js";
 import { RuntimeStore } from "./store.js";
 import { executeCorrection, executeTicket } from "./workflow.js";
 
 const appRoot = resolve(process.env.AGENTDECK_APP_ROOT ?? process.cwd());
+initializeRuntimeConfig(appRoot);
 const store = new RuntimeStore();
 const devBoard = assertDevelopmentBoard(appRoot);
 if (devBoard) process.env.AGENTDECK_DEV_BOARD_ID = devBoard.project_id;

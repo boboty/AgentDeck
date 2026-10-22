@@ -1,0 +1,44 @@
+{
+  "result": "PASS",
+  "checks": [
+    {
+      "name": "health",
+      "status": 200,
+      "requestId": "smoke-health-001",
+      "body": {
+        "status": "ok",
+        "service": "agentdeck-backend",
+        "api": "/api/v1",
+        "developmentBoardId": "01M5FTPVNK6VA9TJ44SK9VWV99"
+      }
+    },
+    {
+      "name": "web-home",
+      "status": 200,
+      "title": true
+    },
+    {
+      "name": "bundled-recordings",
+      "status": 200,
+      "ids": [
+        "success",
+        "correction",
+        "live"
+      ]
+    },
+    {
+      "name": "static-replay",
+      "status": 200,
+      "mode": "replay",
+      "ticketId": "tkt_c5baa5d2-c0eb-4045-9b25-fd17414a6430",
+      "eventCount": 18,
+      "fileCount": 9
+    },
+    {
+      "name": "sse-live-event",
+      "status": 200,
+      "ticketId": "tkt_a453bf62-9912-49ca-bbab-ddbdb136b762",
+      "hasCreated": true
+    }
+  ]
+}

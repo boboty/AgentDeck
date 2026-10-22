@@ -4,7 +4,7 @@ AgentDeck is a local customer-support collaboration demo. It turns a typed suppo
 
 ## Run locally
 
-Requirements: Node.js 24, npm 11, Codex CLI 0.163.0 with its supported login, and a local Agent Board CLI v0.2.3 on `PATH`.
+Requirements: Node.js 24, npm 11, Codex CLI 0.163.0, and a local Agent Board CLI v0.2.3 on `PATH`. The default provider uses the existing Codex CLI configuration and login. To use DeepSeek Flash, copy `.env.example` to `.env`, add a DeepSeek API key, and restart the server. `.env` is ignored by Git.
 
 ```sh
 npm ci
@@ -15,14 +15,22 @@ npm start
 
 Open <http://127.0.0.1:4317>. Use **创建工单** to enter a local support request, then **启动协作** to run it. The UI consumes live backend events and SSE; it does not write Agent Board state. `GET /api/v1/recordings` exposes the bundled immutable recordings and `/api/v1/recordings/:id/replay` reads one without starting an agent or mutating a board. The system-status screen reports API health and visible errors.
 
+### Model configuration
+
+The server reads the project `.env` at startup. Values already present in the process environment take precedence. With no model variables, the Orchestrator uses the existing Codex default while the Worker and Verifier keep `gpt-6-luna` with high reasoning effort. For DeepSeek, set `AGENTDECK_MODEL_PROVIDER=deepseek`, `AGENTDECK_MODEL_BASE_URL=https://api.deepseek.com`, `AGENTDECK_MODEL=deepseek-flash`, `AGENTDECK_MODEL_EFFORT=high`, and `DEEPSEEK_API_KEY`; restart the server after edits. Missing keys or invalid settings stop startup with a safe message. Optional `AGENTDECK_ORCHESTRATOR_MODEL` / `_EFFORT`, `AGENTDECK_WORKER_MODEL` / `_EFFORT`, and `AGENTDECK_VERIFIER_MODEL` / `_EFFORT` values override the global model and effort for that role. Provider selection is shared across all three roles. The API key stays in the server/CLI child environment and is not stored in agent events or image layers.
+
+The DeepSeek settings follow its Codex Responses integration (`wire_api=responses`); DeepSeek Flash supports streamed Responses, structured text formats, function tools, and Codex's `apply_patch` custom tool, while server web search is disabled. The API key is available to the SDK provider process, and Codex removes it from the model's shell-tool environment. See the [DeepSeek Codex setup guide](https://api-docs.deepseek.com/quick_start/agent_integrations/codex/) and [Responses API compatibility guide](https://api-docs.deepseek.com/guides/responses_api/). AgentDeck configures the provider only for its own SDK child process and does not change `~/.codex/config.toml`.
+
+**Provider verification limit:** without a user-supplied `DEEPSEEK_API_KEY`, this release has been exercised against a local mock of the Responses stream, including structured output and a real Codex CLI tool call. It has not made a live request to DeepSeek.
+
 To run the browser checks, install Playwright Chromium once (`npx playwright install chromium`) or set `PLAYWRIGHT_CHANNEL=chrome` if Chrome is installed. `make check` includes a deterministic HTTP/SSE smoke and Playwright UI checks. The real-model three-role run is a separate explicit verification described below.
 
 ## Run with Compose
 
-Compose runs a self-contained image with the official Agent Board v0.2.3 binary. It verifies the release archive digest during build. The local Codex auth file is mounted read-only at the SDK's standard path; it is never copied into the image or project. Runtime records, board databases, and non-secret Codex state use dedicated Compose volumes.
+Compose runs a self-contained image with the official Agent Board v0.2.3 binary. It verifies the release archive digest during build. Project `.env` values are injected into the app container at runtime; `.env` is excluded from the build context. Set `CODEX_AUTH_FILE` to mount a local Codex auth file read-only when using the Codex login; the mount is optional for DeepSeek API-key mode. Runtime records, board databases, and non-secret Codex state use dedicated Compose volumes.
 
 ```sh
-CODEX_AUTH_FILE="$HOME/.codex/auth.json" docker compose -p agentdeck-demo up --build -d
+docker compose -p agentdeck-demo up --build -d
 ```
 
 Open <http://127.0.0.1:4317>. Health is available at <http://127.0.0.1:4317/api/v1/health>. Stop the demo while keeping its runtime data with:
@@ -49,7 +57,7 @@ Run the end-to-end real model workflow against the local service after authentic
 BASE_URL=http://127.0.0.1:4317 AGENTDECK_LIVE_E2E=1 npx playwright test e2e/live-workflow.spec.ts
 ```
 
-The test creates and starts one synthetic ticket in the Web UI, waits for its actual terminal state, fetches its persisted replay, and saves the response and screenshot under `artifacts/task3-web/`. It requires network access, Codex login, an available model, and Agent Board CLI 0.2.3. Worker and Verifier use `gpt-6-luna` with high reasoning effort; Orchestrator keeps the configured default. A returned `HUMAN REVIEW` is displayed as a real outcome rather than silently retried.
+The test creates and starts one synthetic ticket in the Web UI, waits for its actual terminal state, fetches its persisted replay, and saves the response and screenshot under `artifacts/task3-web/`. It requires network access, valid provider credentials, an available model, and Agent Board CLI 0.2.3. With the default Codex provider, Worker and Verifier use `gpt-6-luna` with high reasoning effort while Orchestrator keeps the configured default. An explicitly configured global model applies to all roles unless a role override is set. A returned `HUMAN REVIEW` is displayed as a real outcome rather than silently retried.
 
 `make check` runs ESLint, backend and frontend TypeScript checks, the backend/Vite production build, focused Node tests, isolated HTTP/SSE/replay smoke checks, a browser regression that streams the saved real-run events through the actual HTTP SSE endpoint, and the Playwright UI suite. The SSE regression uses an isolated temporary runtime and makes no model call; the real model workflow remains a separate explicit verification.
 

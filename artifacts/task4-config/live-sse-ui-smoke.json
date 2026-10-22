@@ -1,0 +1,73 @@
+{
+  "result": "PASS",
+  "source": "/Users/yanbo/Github/AgentDeck/artifacts/task3-web/live-web-run-tkt_b2755e67-af0f-4eb5-99d9-dd132716b94a.json",
+  "fixtureSha256": "82d4e9261fbb1960f804c59a6a1e1cd4f4d865d713d229884b3aa1f53b3b8e1b",
+  "ticketId": "tkt_b2755e67-af0f-4eb5-99d9-dd132716b94a",
+  "stream": {
+    "status": 200,
+    "contentType": "text/event-stream; charset=utf-8"
+  },
+  "requiredTypes": [
+    "plan.validated",
+    "agent.completed",
+    "agent.tool",
+    "worker.proposal",
+    "verifier.programmatic",
+    "verifier.semantic"
+  ],
+  "observed": [
+    {
+      "type": "plan.validated",
+      "expected": 1,
+      "displayed": 1,
+      "text": [
+        "plan · validated2026/10/22 03:43:32orchestrator#5orders、policies · 4 项验收条件"
+      ]
+    },
+    {
+      "type": "agent.completed",
+      "expected": 3,
+      "displayed": 3,
+      "text": [
+        "agent · completed2026/10/22 03:43:32orchestrator#4configured-default · configured-default · 4 条 SDK 事件",
+        "agent · completed2026/10/22 03:43:53worker#13gpt-6-luna · high · 9 条 SDK 事件",
+        "agent · completed2026/10/22 03:44:04verifier#16gpt-6-luna · high · 4 条 SDK 事件"
+      ]
+    },
+    {
+      "type": "agent.tool",
+      "expected": 4,
+      "displayed": 4,
+      "text": [
+        "agent · tool2026/10/22 03:43:39worker#9/bin/zsh -lc 'node ./tools/query-tool.mjs orders' · in_progress",
+        "agent · tool2026/10/22 03:43:39worker#10/bin/zsh -lc 'node ./tools/query-tool.mjs orders' · completed",
+        "agent · tool2026/10/22 03:43:45worker#11/bin/zsh -lc 'node ./tools/query-tool.mjs policies' · in_progress",
+        "agent · tool2026/10/22 03:43:45worker#12/bin/zsh -lc 'node ./tools/query-tool.mjs policies' · completed"
+      ]
+    },
+    {
+      "type": "worker.proposal",
+      "expected": 1,
+      "displayed": 1,
+      "text": [
+        "worker · proposal2026/10/22 03:43:53worker#14订单 OD-24081 已于 2026-10-19 14:22 签收；订单记录列明退货申请期限至 2026-10-26。政策规定签收后 7 个自然日内可申请退货，商品及包装应保持完整。"
+      ]
+    },
+    {
+      "type": "verifier.programmatic",
+      "expected": 1,
+      "displayed": 1,
+      "text": [
+        "verifier · programmatic2026/10/22 03:43:53verifier#15程序检查 7 项 · PASS"
+      ]
+    },
+    {
+      "type": "verifier.semantic",
+      "expected": 1,
+      "displayed": 1,
+      "text": [
+        "verifier · semantic2026/10/22 03:44:04verifier#17PASS · The recommendation directly answers both parts of the ticket: the order is shown as delivered, and the recorded return-application deadline is 2026-10-26. It explains the seven-calendar-day policy and item/package condition without promising a refund or treating the intact outer packaging note as proof of return eligibility. No repeat-contact history was queried, and the recommendation makes no claim about it."
+      ]
+    }
+  ]
+}

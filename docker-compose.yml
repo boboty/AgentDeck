@@ -4,6 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile
     image: agentdeck-local:task3
+    env_file:
+      - path: .env
+        required: false
     ports:
       - "127.0.0.1:4317:4317"
     environment:
@@ -17,7 +20,7 @@ services:
       - aboard-home:/home/node/.agent-board
       - codex-home:/home/node/.codex
       - type: bind
-        source: ${CODEX_AUTH_FILE:?Set CODEX_AUTH_FILE to the existing Codex auth.json}
+        source: ${CODEX_AUTH_FILE:-/dev/null}
         target: /home/node/.codex/auth.json
         read_only: true
         bind:
